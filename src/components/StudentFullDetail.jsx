@@ -1,5 +1,8 @@
+import { doc, setDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
+import { db } from "../Database/firebase";
+
 const StudentFullDetail = () => {
   const location = useLocation();
   // const { jsonData } = location.state || {};
@@ -9,27 +12,22 @@ const StudentFullDetail = () => {
   const [formData, setFormData] = useState({
     name: jsonData.name || "",
     place: jsonData.place || "",
-    cls: jsonData.class || "",
-    rollNumber: jsonData.rollNumber ||"",
-    fatherName: jsonData.fatherName ||"",
-    motherName: jsonData.motherName ||"",
-    phoneNumber: jsonData.phoneNumber ||"",
-    address: jsonData.address ||"",
-    marks: jsonData.marks ||"",
+    cls: jsonData.cls || "",
+    rollNumber: jsonData.rollNumber || "",
+    fatherName: jsonData.fatherName || "",
+    motherName: jsonData.motherName || "",
+    phoneNumber: jsonData.phoneNumber || "",
+    address: jsonData.address || "",
+    marks: jsonData.marks || "",
   });
   const onEdit = () => {
     setEdit(!edit);
   };
-  const onSave = (rollNumber) => {
-    var masterdata = JSON.parse(localStorage.getItem("masterdata"));
-    // console.log(masterdata);
-    const listItems = masterdata.filter(
-      (item) => item.rollNumber !== rollNumber
-    );
+  const onSave = async (rollNumber) => {
     const newItems = {
       name: formData.name,
       place: formData.place,
-      class: formData.cls,
+      cls: formData.cls,
       rollNumber: formData.rollNumber,
       fatherName: formData.fatherName,
       motherName: formData.motherName,
@@ -38,11 +36,12 @@ const StudentFullDetail = () => {
       marks: formData.marks,
     };
 
-    const freshList = [...listItems, newItems];
-    console.log("freshdata", freshList);
+    // const freshList =  newItems];
+    await setDoc(doc(db, "studentdetails", rollNumber), newItems);
+    // console.log("freshdata", freshList);
     setJsonData(newItems);
     // console.log(jsonData);
-    localStorage.setItem("masterdata", JSON.stringify(freshList));
+    // localStorage.setItem("masterdata", JSON.stringify(freshList));
     setEdit(!edit);
   };
   const handleInputChange = (e) => {
@@ -80,7 +79,7 @@ const StudentFullDetail = () => {
 
               <div className="form-group">
                 <label>Class:</label>
-                <p>{jsonData.class}</p>
+                <p>{jsonData.cls}</p>
               </div>
 
               <div className="form-group">
@@ -119,106 +118,104 @@ const StudentFullDetail = () => {
         </div>
       ) : (
         <div className="editItems">
-          <form onSubmit={onSave}>
-            <div className="row">
-              <div className="col-md-6">
-                <label htmlFor="name">Name:</label>
-                <input
-                  name="name"
-                  type="text"
-                  className="form-control"
-                  placeholder="Enter name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                />
+          <div className="row">
+            <div className="col-md-6">
+              <label htmlFor="name">Name:</label>
+              <input
+                name="name"
+                type="text"
+                className="form-control"
+                placeholder="Enter name"
+                value={formData.name}
+                onChange={handleInputChange}
+              />
 
-                <label htmlFor="rollNumber">Roll Number:</label>
-                <input
-                  name="rollNumber"
-                  type="text"
-                  className="form-control"
-                  placeholder="Enter roll number"
-                  value={formData.rollNumber}
-                  onChange={handleInputChange}
-                />
+              <label htmlFor="rollNumber">Roll Number:</label>
+              <input
+                name="rollNumber"
+                type="text"
+                className="form-control"
+                placeholder="Enter roll number"
+                value={formData.rollNumber}
+                onChange={handleInputChange}
+              />
 
-                <label htmlFor="cls">Class:</label>
-                <input
-                  name="cls"
-                  type="text"
-                  className="form-control"
-                  placeholder="Enter class"
-                  value={formData.cls}
-                  onChange={handleInputChange}
-                />
-              </div>
-
-              <div className="col-md-6">
-                <label htmlFor="place">Place:</label>
-                <input
-                  name="place"
-                  type="text"
-                  className="form-control"
-                  placeholder="Enter place"
-                  value={formData.place}
-                  onChange={handleInputChange}
-                />
-
-                <label htmlFor="fatherName">Father's Name:</label>
-                <input
-                  name="fatherName"
-                  type="text"
-                  className="form-control"
-                  placeholder="Enter father's name"
-                  value={formData.fatherName}
-                  onChange={handleInputChange}
-                />
-
-                <label htmlFor="motherName">Mother's Name:</label>
-                <input
-                  name="motherName"
-                  type="text"
-                  className="form-control"
-                  placeholder="Enter mother's name"
-                  value={formData.motherName}
-                  onChange={handleInputChange}
-                />
-              </div>
-
-              <div className="col-md-6">
-                <label htmlFor="phoneNumber">Phone Number:</label>
-                <input
-                  name="phoneNumber"
-                  type="text"
-                  className="form-control"
-                  placeholder="Enter phone number"
-                  value={formData.phoneNumber}
-                  onChange={handleInputChange}
-                />
-
-                <label htmlFor="address">Address:</label>
-                <input
-                  name="address"
-                  type="text"
-                  className="form-control"
-                  placeholder="Enter address"
-                  value={formData.address}
-                  onChange={handleInputChange}
-                />
-
-                <label htmlFor="marks">Marks:</label>
-                <input
-                  name="marks"
-                  type="text"
-                  className="form-control"
-                  placeholder="Enter marks"
-                  value={formData.marks}
-                  onChange={handleInputChange}
-                />
-              </div>
+              <label htmlFor="cls">Class:</label>
+              <input
+                name="cls"
+                type="text"
+                className="form-control"
+                placeholder="Enter class"
+                value={formData.cls}
+                onChange={handleInputChange}
+              />
             </div>
-            <button onClick={() => onSave(jsonData.rollNumber)}>Save</button>
-          </form>
+
+            <div className="col-md-6">
+              <label htmlFor="place">Place:</label>
+              <input
+                name="place"
+                type="text"
+                className="form-control"
+                placeholder="Enter place"
+                value={formData.place}
+                onChange={handleInputChange}
+              />
+
+              <label htmlFor="fatherName">Father's Name:</label>
+              <input
+                name="fatherName"
+                type="text"
+                className="form-control"
+                placeholder="Enter father's name"
+                value={formData.fatherName}
+                onChange={handleInputChange}
+              />
+
+              <label htmlFor="motherName">Mother's Name:</label>
+              <input
+                name="motherName"
+                type="text"
+                className="form-control"
+                placeholder="Enter mother's name"
+                value={formData.motherName}
+                onChange={handleInputChange}
+              />
+            </div>
+
+            <div className="col-md-6">
+              <label htmlFor="phoneNumber">Phone Number:</label>
+              <input
+                name="phoneNumber"
+                type="text"
+                className="form-control"
+                placeholder="Enter phone number"
+                value={formData.phoneNumber}
+                onChange={handleInputChange}
+              />
+
+              <label htmlFor="address">Address:</label>
+              <input
+                name="address"
+                type="text"
+                className="form-control"
+                placeholder="Enter address"
+                value={formData.address}
+                onChange={handleInputChange}
+              />
+
+              <label htmlFor="marks">Marks:</label>
+              <input
+                name="marks"
+                type="text"
+                className="form-control"
+                placeholder="Enter marks"
+                value={formData.marks}
+                onChange={handleInputChange}
+              />
+            </div>
+          </div>
+          <button onClick={() => onSave(jsonData.rollNumber)}>Save</button>
         </div>
       )}
     </>

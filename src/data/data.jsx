@@ -57,7 +57,7 @@ const sampleData = [
   {
     name: "Eva Rodriguez",
     rollNumber: "F006",
-    class: "10F",
+    class: "3A",
     place: "City F",
     address: "789 Maple St, City F",
     fatherName: "Ricardo Rodriguez",

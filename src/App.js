@@ -6,7 +6,9 @@ import HeadStable from "./components/HeadStable";
 const App = () => {
   return (
     <>
-      <HeadStable></HeadStable>
+      <div className="home">
+        <HeadStable></HeadStable>
+      </div>
     </>
   );
 };
