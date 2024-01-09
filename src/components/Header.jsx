@@ -1,117 +1,104 @@
 import React, { useState } from "react";
-import "bootstrap/dist/css/bootstrap.css";
-import { Link, useNavigate } from "react-router-dom";
-import { Dropdown } from "react-bootstrap";
+import StudentDropdown from "./StudentDropdown";
+import AcademicDropdown from "./AcademicDropdown";
+import { Link } from "react-router-dom";
 
 const Header = () => {
-  const [isAcademicDropdownOpen, setAcademicDropdownOpen] = useState(false);
-  const [isStudentDropdownOpen, setStudentDropdownOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const handleAcademicDropdownToggle = (isOpen) => {
-    setAcademicDropdownOpen(isOpen);
-  };
-
-  const handleStudentDropdownToggle = (isOpen) => {
-    setStudentDropdownOpen(isOpen);
+  const handleDropdownToggle = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+    handleAcademicClose();
   };
 
-  const handleAcademicDropdownClose = () => {
-    setAcademicDropdownOpen(false);
+  const handleDropdownClose = () => {
+    setIsDropdownOpen(false);
+  };
+  const [isAcademicOpen, setAcademicOpen] = useState(false);
+
+  const handelAcademicOpen = () => {
+    setAcademicOpen(!isAcademicOpen);
+    handleDropdownClose();
   };
 
-  const handleStudentDropdownClose = () => {
-    setStudentDropdownOpen(false);
+  const handleAcademicClose = () => {
+    setAcademicOpen(false);
   };
-  const navigate = useNavigate();
-  const addNewStudent = () => {
-    navigate("/studentdetails", {
-      state: { new: true },
-    });
-  };
-  const getStudentDetails = () => {
-    navigate("/studentdetails", {
-      state: { new: false },
-    });
-  };
+
   return (
-    <>
-      {/* <!-- Image and text --> */}
-      <div className="row">
-        <div className="col-sm-6 bg-body-secondary">
-          <div className="row">
-            <div className="col-sm-2">
-              <Link to="/home" className="fs-5 text-danger">
-                Home
-              </Link>
-            </div>
-            <div className="col-sm-3">
-              <Dropdown
-                show={isAcademicDropdownOpen}
-                onMouseEnter={() => handleAcademicDropdownToggle(true)}
-                // onMouseLeave={() => handleAcademicDropdownToggle(false)}
-              >
-                <Dropdown.Toggle
-                  variant="link"
-                  id="dropdown-academic"
-                  className="fs-5 text-danger"
+    <div className="mx-0">
+      <nav className="border-gray-200 bg-gray-400">
+        <div className="container mx-0 flex flex-wrap items-center">
+          <div className="hidden md:block w-full md:w-auto" id="mobile-menu">
+            <ul className="flex-col md:flex-row flex md:space-x-8 mt-2 md:mt-0 md:text-lg md:font-large">
+              {/* Other menu items */}
+              <li>
+                <Link
+                  to="/home"
+                  className="text-gray-700 hover:bg-gray-50 border-b font-bold border-gray-100 md:hover:bg-transparent md:border-0 pl-3 pr-4 py-2 md:hover:text-blue-700 md:p-0 font-medium flex items-center justify-between w-full md:w-auto"
                 >
-                  Academic scores
-                </Dropdown.Toggle>
+                  Home
+                </Link>
+              </li>
 
-                <Dropdown.Menu
-                  onMouseEnter={() => handleAcademicDropdownToggle(true)}
-                  // onMouseLeave={handleAcademicDropdownClose}
+              <li>
+                <button
+                  id="dropdownNavbarLink"
+                  className="text-gray-700 hover:bg-gray-50 border-b font-bold border-gray-100 md:hover:bg-transparent md:border-0 pl-3 pr-4 py-2 md:hover:text-blue-700 md:p-0 font-medium flex items-center justify-between w-full md:w-auto"
+                  onMouseEnter={handleDropdownToggle}
                 >
-                  <Dropdown.Item
-                    as={Link}
-                    to="/academichome"
-                    // onMouseEnter={() => handleAcademicDropdownToggle(true)}
-                    onMouseLeave={handleAcademicDropdownClose}
+                  StudentDetails
+                  <svg
+                    className="w-4 h-4 ml-1"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    Academic Home
-                  </Dropdown.Item>
-                  {/* Add more dropdown items as needed */}
-                </Dropdown.Menu>
-              </Dropdown>
-            </div>
-            <div className="col-sm-3">
-              <Dropdown
-                show={isStudentDropdownOpen}
-                onMouseEnter={() => handleStudentDropdownToggle(true)}
-                // onMouseLeave={() => handleStudentDropdownToggle(false)}
-              >
-                <Dropdown.Toggle
-                  variant="link"
-                  id="dropdown-student"
-                  className="fs-5 text-danger"
+                    <path
+                      fillRule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    ></path>
+                  </svg>
+                </button>
+                {/* Dropdown menu */}
+                <StudentDropdown
+                  isOpen={isDropdownOpen}
+                  handleClose={handleDropdownClose}
+                />
+              </li>
+              <li>
+                <button
+                  id="dropdownNavbarLink"
+                  className="text-gray-700 hover:bg-gray-50 border-b font-bold border-gray-100 md:hover:bg-transparent md:border-0 pl-3 pr-4 py-2 md:hover:text-blue-700 md:p-0 font-medium flex items-center justify-between w-full md:w-auto"
+                  onMouseEnter={handelAcademicOpen}
                 >
-                  Student details
-                </Dropdown.Toggle>
-
-                <Dropdown.Menu
-                  onMouseEnter={() => handleStudentDropdownToggle(true)}
-                  onMouseLeave={handleStudentDropdownClose}
-                >
-                  <Dropdown.Item onClick={getStudentDetails}>
-                    Student Details
-                  </Dropdown.Item>
-                  <Dropdown.Item onClick={addNewStudent}>
-                    Add new student
-                  </Dropdown.Item>
-                  {/* Add more dropdown items as needed */}
-                </Dropdown.Menu>
-              </Dropdown>
-            </div>
-            <div className="col-sm-3">
-              <Link to="/public" className="fs-5 text-danger">
-                Public
-              </Link>
-            </div>
+                  Acadeimics
+                  <svg
+                    className="w-4 h-4 ml-1"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    ></path>
+                  </svg>
+                </button>
+                {/* Dropdown menu */}
+                <AcademicDropdown
+                  isOpen={isAcademicOpen}
+                  handleClose={handleAcademicClose}
+                />
+              </li>
+              {/* Other menu items */}
+            </ul>
           </div>
         </div>
-        <div className="col-6 bg-body-secondary"></div>
-      </div>
-    </>
+      </nav>
+    </div>
   );
 };
 
